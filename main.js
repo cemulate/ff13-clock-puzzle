@@ -111,12 +111,10 @@ ClockPuzzle.prototype.draw = function() {
 	var nodeRadiusLimit = Math.floor(Math.sqrt(radius*radius + radius*radius - 2*radius*radius*Math.cos((1/n) * 2 * Math.PI)) / 2);
 	var nodeRadius = (nodeRadiusLimit < 100) ? nodeRadiusLimit : 100;
 
-	console.log(radius, nodeRadius);
-
 	var glow = paper.filter(Snap.filter.shadow(3, 3, 4, "#fefec9", 0.3));
 
 	for (var i = 0; i < n; i ++) {
-		var angle = (i/n) * 2 * Math.PI;
+		var angle = -(Math.PI / 2) + (i/n) * 2 * Math.PI;
 
 		var x = radius * Math.cos(angle);
 		var y = radius * Math.sin(angle);
@@ -166,12 +164,14 @@ ClockPuzzle.prototype.draw = function() {
 	longHandGroup.add(this.paper.polygon([handLength, -20, handLength, 20, handLength+20, 0, handLength, -20]).addClass("arrowhead"));
 	longHandGroup.addClass("handGroup");
 	longHandGroup.attr({id: "hand1"});
+	longHandGroup.transform("r-90,0,0");
 
 	var shortHandGroup = this.paper.group();
 	shortHandGroup.add(this.paper.line(0, 0, handLength, 0).addClass("hand"));
 	shortHandGroup.add(this.paper.polygon([handLength, -20, handLength, 20, handLength+20, 0, handLength, -20]).addClass("arrowhead"));
 	shortHandGroup.addClass("handGroup");
 	shortHandGroup.attr({id: "hand2"});
+	shortHandGroup.transform("r-90,0,0");
 
 	this.g.add(longHandGroup);
 	this.g.add(shortHandGroup);
@@ -217,7 +217,7 @@ ClockPuzzle.prototype.update = function(newMarkedIndex) {
 
 	}, this));
 
-	var newAngle = (newMarkedIndex / this.mapping.length) * 360;
+	var newAngle = -90 + (newMarkedIndex / this.mapping.length) * 360;
 	var newTString = "r" + newAngle + ",0,0";
 
 	this.g.select("#hand1").transform(newTString);
@@ -226,8 +226,8 @@ ClockPuzzle.prototype.update = function(newMarkedIndex) {
 
 	setTimeout(_.bind(function() {
 
-		var newAngle1 = (this.choices[0] / this.mapping.length) * 360;
-		var newAngle2 = (this.choices[1] / this.mapping.length) * 360;
+		var newAngle1 = -90 + (this.choices[0] / this.mapping.length) * 360;
+		var newAngle2 = -90 + (this.choices[1] / this.mapping.length) * 360;
 
 		newAngle1 = acuteAngle(newAngle, newAngle1);
 		newAngle2 = acuteAngle(newAngle, newAngle2);

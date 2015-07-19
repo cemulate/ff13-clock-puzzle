@@ -61,6 +61,7 @@
 
 			$(".gameover").hide();
 			$(".victory").hide();
+			$(".solve").hide();
 
 			$("#generatePuzzle").click(function() {
 				var length = $("#puzzleLength").val();
@@ -78,6 +79,26 @@
 				$(".gameover").hide();
 				$(".victory").hide();
 			});
+
+			$("#showSolve").click(function () {
+				$(".solve").show();
+			});
+
+			$("#solvePuzzle").click(function () {
+				$("#solveResults").html("");
+				var puzzle = $("#puzzleInput").val();
+				puzzle = _.map(puzzle.split(","), function(x) {return parseInt(x)});
+				var solver = new ClockPuzzle(null, 0, 0);
+				solver.mapping = puzzle;
+				var solution = solver.findSolution();
+				if (solution) {
+					for (var i = 0; i < solution.length; i ++) {
+						$("#solveResults").append(solution[i] + ((i == solution.length - 1) ? "" : ", "));
+					}
+				} else {
+					$("#solveResults").append("Unsolvable");
+				}
+			})
 
 		});
 
@@ -123,6 +144,32 @@
 				<div class="row">
 					<div class="large-12 columns">
 						<a id="resetPuzzle" class="button small expand">Reset this puzzle</a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="large-12 columns">
+						<a id="showSolve" class="button small expand">Solve a puzzle</a>
+					</div>
+				</div>
+				<div class="row solve">
+					<div class="large-12 columns">
+						<p>
+							Starting at the top / north-most node, enter the node values going clockwise, separated by commas.
+							In the solution, 0 refers to the top node, 1 to the next one clockwise, and so on.
+						</p>
+					</div>
+				</div>
+				<div class="row solve">
+					<div class="large-10 columns">
+						<input id="puzzleInput" class="taller" type="text" placeholder="Node values">
+					</div>
+					<div class="large-2 columns">
+						<a id="solvePuzzle" class="button small expand">Go</a>
+					</div>
+				</div>
+				<div class="row solve">
+					<div class="large-12 columns">
+						<p id="solveResults"></p>
 					</div>
 				</div>
 				<div class="row gameover">
