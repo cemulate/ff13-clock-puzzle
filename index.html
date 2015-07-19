@@ -92,6 +92,7 @@
 				solver.mapping = puzzle;
 				var solution = solver.findSolution();
 				if (solution) {
+					$("#solveResults").append("Solution sequence: ");
 					for (var i = 0; i < solution.length; i ++) {
 						$("#solveResults").append(solution[i] + ((i == solution.length - 1) ? "" : ", "));
 					}
