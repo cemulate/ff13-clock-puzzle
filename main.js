@@ -106,18 +106,22 @@ ClockPuzzle.prototype.draw = function() {
 
 	var n = this.mapping.length;
 
-	var nodeRadiusLimit = Math.floor(Math.sqrt(300*300 + 300*300 - 2*300*300*Math.cos((1/n) * 2 * Math.PI)) / 2);
+	var radiusLimit = Math.floor(Math.min(this.width, this.height) / 3.7);
+	var radius = (radiusLimit < 300) ? radiusLimit : 300;
+	var nodeRadiusLimit = Math.floor(Math.sqrt(radius*radius + radius*radius - 2*radius*radius*Math.cos((1/n) * 2 * Math.PI)) / 2);
+	var nodeRadius = (nodeRadiusLimit < 100) ? nodeRadiusLimit : 100;
+
+	console.log(radius, nodeRadius);
 
 	var glow = paper.filter(Snap.filter.shadow(3, 3, 4, "#fefec9", 0.3));
 
 	for (var i = 0; i < n; i ++) {
 		var angle = (i/n) * 2 * Math.PI;
 
-		var x = 300 * Math.cos(angle);
-		var y = 300 * Math.sin(angle);
+		var x = radius * Math.cos(angle);
+		var y = radius * Math.sin(angle);
 
-		var radius = (nodeRadiusLimit < 100) ? nodeRadiusLimit : 100;
-		var circle = this.paper.circle(x, y, radius - 5).addClass("node").attr({nodeIndex: i});
+		var circle = this.paper.circle(x, y, nodeRadius - 5).addClass("node").attr({nodeIndex: i});
 
 		var text = this.paper.text(x, y, this.mapping[i].toString()).addClass("nodeText").attr({nodeIndex: i});
 		text.attr({"font-size": "50px"});
@@ -142,22 +146,30 @@ ClockPuzzle.prototype.draw = function() {
 
 	}, this));
 
-	this.g.selectAll(".nodeText").forEach(function (el) {
+	this.g.selectAll(".nodeText").forEach(_.bind(function (el) {
+		
 		el.attr({
 			"stroke": "black",
 			"font-size": "20px"
 		});
-	});
+
+		el.click(_.bind(function() {
+			this.mark(parseInt(el.attr("nodeIndex")));
+		}, this));
+
+	}, this));
+
+	var handLength = radius - nodeRadius - 25;
 
 	var longHandGroup = this.paper.group();
-	longHandGroup.add(this.paper.line(0, 0, 130, 0).addClass("hand"));
-	longHandGroup.add(this.paper.polygon([130, -20, 130, 20, 150, 0, 130, -20]).addClass("arrowhead"));
+	longHandGroup.add(this.paper.line(0, 0, handLength, 0).addClass("hand"));
+	longHandGroup.add(this.paper.polygon([handLength, -20, handLength, 20, handLength+20, 0, handLength, -20]).addClass("arrowhead"));
 	longHandGroup.addClass("handGroup");
 	longHandGroup.attr({id: "hand1"});
 
 	var shortHandGroup = this.paper.group();
-	shortHandGroup.add(this.paper.line(0, 0, 130, 0).addClass("hand"));
-	shortHandGroup.add(this.paper.polygon([130, -20, 130, 20, 150, 0, 130, -20]).addClass("arrowhead"));
+	shortHandGroup.add(this.paper.line(0, 0, handLength, 0).addClass("hand"));
+	shortHandGroup.add(this.paper.polygon([handLength, -20, handLength, 20, handLength+20, 0, handLength, -20]).addClass("arrowhead"));
 	shortHandGroup.addClass("handGroup");
 	shortHandGroup.attr({id: "hand2"});
 
