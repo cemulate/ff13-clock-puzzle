@@ -106,7 +106,7 @@ ClockPuzzle.prototype.draw = function() {
 
 	var n = this.mapping.length;
 
-	var radiusLimit = Math.floor(Math.min(this.width, this.height) / 3.7);
+	var radiusLimit = Math.floor(Math.min(this.width, this.height) / 3.2);
 	var radius = (radiusLimit < 300) ? radiusLimit : 300;
 	var nodeRadiusLimit = Math.floor(Math.sqrt(radius*radius + radius*radius - 2*radius*radius*Math.cos((1/n) * 2 * Math.PI)) / 2);
 	var nodeRadius = (nodeRadiusLimit < 100) ? nodeRadiusLimit : 100;
