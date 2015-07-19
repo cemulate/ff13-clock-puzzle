@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+
+<html class="no-js" lang="en" >
+
+	<head>
+	
+		<meta charset="utf-8">
+		<!-- If you delete this meta tag World War Z will become a reality -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		
+		<title>Title</title>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+
+		<!-- If you are using the CSS version, only link these 2 files, you may add app.css to use for your overrides if you like -->
+		<link rel="stylesheet" href="/foundation-5.5.1/css/normalize.css">
+		<link rel="stylesheet" href="/foundation-5.5.1/css/foundation.css">
+
+		<script src="/foundation-5.5.1/js/vendor/modernizr.js"></script>
+
+	</head>
+
+	<link href='//fonts.googleapis.com/css?family=Open+Sans:400,400italic' rel='stylesheet' type='text/css'>
+
+	<!-- JS Dependencies -->
+	<script src="/js/util.js"></script>
+	<script src="/js/underscore.min.js"></script>
+	<script src="/snap-0.4.1/snap.svg.js"></script>
+
+	<!-- Non-foundation custom CSS -->
+	<link rel="stylesheet" href="/appStyle.css">
+
+	<!-- Main application code -->
+	<script src="/main.js"></script>
+
+	<script type="text/javascript">
+		$(document).ready(function () {
+
+			var w = $("#snapContainer").width();
+			var h = $(window).innerHeight() - $("#topBar").height() - 10;
+
+			$("#snapContainer").height(h);
+
+			paper = Snap("#svg");
+
+			c = new ClockPuzzle(paper, w, h, {
+				"gameover": function() {
+					$(".gameover").show();
+				},
+				"victory": function() {
+					$(".victory").show();
+				}
+			});
+			c.resetGenerateNew(6);
+
+			c.draw();
+
+			$(".nodeText").css("font-size", "50px");
+
+			$(document).foundation();
+
+			$(".gameover").hide();
+			$(".victory").hide();
+
+			$("#generatePuzzle").click(function() {
+				var length = $("#puzzleLength").val();
+				c.resetGenerateNew(length);
+				c.draw();
+				$(".nodeText").css("font-size", "50px");
+				$(".gameover").hide();
+				$(".victory").hide();
+			});
+
+			$("#resetPuzzle").click(function () {
+				c.resetGenerateNew(null);
+				c.draw();
+				$(".nodeText").css("font-size", "50px");
+				$(".gameover").hide();
+				$(".victory").hide();
+			});
+
+		});
+
+	</script>
+
+	<body>
+
+		<nav id="topBar" class="top-bar" data-topbar role="navigation">
+			<ul class="title-area">
+				<li class="name">
+					<h1><a href="/">Title</a></h1>
+				</li>
+				<li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+			</ul>
+
+			<section class="top-bar-section">
+				<ul class="right">
+					<li><a href="#">Right</a></li>
+				</ul>
+			</section>
+		</nav>
+
+		<div class="row full-width">
+			<div class="large-4 columns">
+				<hr>
+				<div class="row">
+					<div class="large-10 columns">
+						<div class="range-slider" data-slider data-options="display_selector: #lengthSelector; initial: 6; step: 1; start: 2; end: 20;">
+							<span class="range-slider-handle" role="slider" tabindex="0"></span>
+							<span class="range-slider-active-segment"></span>
+							<input id="puzzleLength" type="hidden">
+						</div>
+					</div>
+					<div class="large-2 columns">
+						<a id="lengthSelector" class="button small expand" disabled></a>
+					</div>
+				</div>
+				<div class="row">
+					<div class="large-12 columns">
+						<a id="generatePuzzle" class="button small expand">Generate new puzzle</a>
+					</div>
+				</div>
+				<div class="row gameover">
+					<div class="large-12 columns">
+						<p>Game over</p>
+					</div>
+				</div>
+				<div class="row gameover">
+					<div class="large-12 columns">
+						<a id="resetPuzzle" class="button small expand">Reset this puzzle</a>
+					</div>
+				</div>
+				<div class="row victory">
+					<div class="large-12 columns">
+						<p>Victory!</p>
+					</div>
+				</div>
+			</div>
+			<div class="large-8 columns">
+				<div id="snapContainer" style="width:100%; height:100%">
+					<svg id="svg" style="width:100%; height:100%"></svg>
+				</div>
+			</div>
+		</div>
+
+		<script src="/foundation-5.5.1/js/foundation.min.js"></script>
+		<script src="/foundation-5.5.1/js/foundation/foundation.topbar.js"></script>
+		<script src="/foundation-5.5.1/js/foundation/foundation.slider.js"></script>
+		<script src="/foundation-5.5.1/js/foundation/foundation.orbit.js"></script>
+
+		<script>
+			$(document).foundation();
+		</script>
+
+	</body>
+
+
+</html>
