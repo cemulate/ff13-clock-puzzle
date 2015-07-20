@@ -231,11 +231,17 @@ ClockPuzzle.prototype.update = function(newMarkedIndex) {
 
 		newAngle1 = acuteAngle(newAngle, newAngle1);
 		newAngle2 = acuteAngle(newAngle, newAngle2);
+		
+		// If both hands are going 180 around, 'tweak' one to a 1 degree smaller angle
+		// so that it will go the opposite direction
+		if (Math.abs(newAngle1 - newAngle) == 180 && Math.abs(newAngle2 - newAngle) == 180) {
+			newAngle1 -= 1;
+			if (Math.abs(newAngle1 - newAngle) < 180) newAngle1 += 1;
+			newAngle1 = acuteAngle(newAngle, newAngle1);
+		}
 
 		var newString1 = "r" + newAngle1 + ",0,0";
 		var newString2 = "r" + newAngle2 + ",0,0";
-
-		console.log(this.g.select("#hand1").transform());
 
 		this.g.select("#hand1").animate({transform: newString1}, 500);
 		this.g.select("#hand2").animate({transform: newString2}, 500);
