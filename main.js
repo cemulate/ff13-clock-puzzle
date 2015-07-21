@@ -112,7 +112,7 @@ ClockPuzzle.prototype.draw = function() {
 	var nodeRadius = (nodeRadiusLimit < 100) ? nodeRadiusLimit : 100;
 
 	var glow = paper.filter(Snap.filter.shadow(3, 3, 4, "#fefec9", 0.3));
-
+	
 	for (var i = 0; i < n; i ++) {
 		var angle = -(Math.PI / 2) + (i/n) * 2 * Math.PI;
 
@@ -172,7 +172,13 @@ ClockPuzzle.prototype.draw = function() {
 	shortHandGroup.addClass("handGroup");
 	shortHandGroup.attr({id: "hand2"});
 	shortHandGroup.transform("r-90,0,0");
-
+	
+	var center = this.paper.circle(0, 0, 15);
+	center.attr({
+		"fill": "gray"
+	});
+	
+	this.g.add(center);
 	this.g.add(longHandGroup);
 	this.g.add(shortHandGroup);
 
@@ -235,8 +241,8 @@ ClockPuzzle.prototype.update = function(newMarkedIndex) {
 		// If both hands are going 180 around, 'tweak' one to a 1 degree smaller angle
 		// so that it will go the opposite direction
 		if (Math.abs(newAngle1 - newAngle) == 180 && Math.abs(newAngle2 - newAngle) == 180) {
-			newAngle1 -= 1;
-			if (Math.abs(newAngle1 - newAngle) < 180) newAngle1 += 1;
+			newAngle1 -= 0.001;
+			if (Math.abs(newAngle1 - newAngle) < 180) newAngle1 += 0.002;
 			newAngle1 = acuteAngle(newAngle, newAngle1);
 		}
 
