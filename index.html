@@ -3,11 +3,11 @@
 <html class="no-js" lang="en" >
 
 	<head>
-	
+
 		<meta charset="utf-8">
 		<!-- If you delete this meta tag World War Z will become a reality -->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		
+
 		<title>FF13 Clock Puzzle</title>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -92,9 +92,14 @@
 				solver.mapping = puzzle;
 				var solution = solver.findSolution();
 				if (solution) {
-					$("#solveResults").append("Solution sequence: ");
+					$("#solveResults").append($("<strong>").html("Going clockwise: ")).append("<br>");
 					for (var i = 0; i < solution.length; i ++) {
-						$("#solveResults").append(solution[i] + ((i == solution.length - 1) ? "" : ", "));
+                        if (solution[i] == 0) {
+                            $("#solveResults").append("The ").append($("<strong>").html("top")).append(" node").append($("<br>"));
+                        } else {
+                            var ordinal = solution[i];
+                            $("#solveResults").append($("<strong>").html(ordinal.toString())).append(ordinalSuffix(ordinal) + " from the top").append($("<br>"));
+                        }
 					}
 				} else {
 					$("#solveResults").append("Unsolvable");
@@ -166,7 +171,7 @@
 						<p>
 							<strong>Instructions: </strong>
 							In the text box, enter the numbers on each clock face separated by commas starting from the top and going clockwise.
-							The solution will be printed as the sequence of nodes you need to touch/click, using the same index pattern (that is, 0 refers to the top node, 1 to the next one clockwise, and so on).
+							The solution will be printed as the sequence of nodes you need to touch.
 						</p>
 					</div>
 				</div>
